@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import {
     BrowserRouter as Router,
     NavLink as Link,
-    Route
+    Route,
+    Redirect,
+    Switch
 } from "react-router-dom";
 import firebase, { auth, database, dbRef } from "./firebase.js";
 import "./App.css";
@@ -11,11 +13,18 @@ import "./App.css";
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 // Components
-class MainMenu extends Component {
+class Dashboard extends Component {
     render() {
         return (
             <h2>Fridge App</h2>
         );
+    }
+
+    componentWillMount() {
+        console.log("Boom shackalaka");
+    }
+    componentDidMount() {
+        console.log("the end");
     }
 }
 
@@ -26,9 +35,17 @@ class LoginPage extends Component {
                 <h1>Fridge App</h1>
                 <p>Welcome. To get started, go here to learn more about what Fridge App is.</p>
                 <div>
-                    <button onClick={ () => this.props.clickHandler(googleProvider) }>Login With Google</button>
+                    <button onClick={() => this.props.login(googleProvider)}>Login With Google</button>
                 </div>
             </div>
+        );
+    }
+}
+
+class NotFound extends Component {
+    render() {
+        return (
+            <h2>We could not find the page you are looking for.</h2>
         );
     }
 }
@@ -38,7 +55,7 @@ class App extends Component {
         super();
         this.state = {
             user: null,
-            loading: false
+            loading: true
         };
         this.login = this.login.bind(this);
     }
@@ -52,25 +69,50 @@ class App extends Component {
         });
     }
 
+    logout() {
+        auth.signOut().then(() => {
+            this.setState({
+                user: null
+            });
+        });
+    }
+
     render() {
-        const checkLogin = () => {
-            // console.log(this.state.user);
-            if (this.state.user) {
-                return (
-                    <MainMenu />
-                );
-            } else {
-                return (
-                    <LoginPage clickHandler={this.login} />
-                );
-            }
-        };
         return (
-            <main className="App">
-                {this.state.loading ? <h1>Loading</h1> : checkLogin() }
-            </main>
+            <Router>
+                <main className="App">
+                    <Switch>
+                        <Route exact path="/" render={() => (
+                            this.state.user ?
+                                (
+                                    <Dashboard />
+                                ) : (
+                                    <LoginPage login={this.login} />
+                                )
+                        )} />
+                        <Route render={() => <Redirect to="/" />} />
+                    </Switch>
+                </main>
+            </Router>
         );
     }
+
+    componentDidMount() {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({
+                    user: user,
+                    loading: false
+                });
+            } else {
+                this.setState({
+                    user: null,
+                    loading: false
+                });
+            }
+        });
+    }
+
 }
 
 export default App;
