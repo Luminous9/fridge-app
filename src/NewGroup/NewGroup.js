@@ -24,7 +24,10 @@ export default class NewGroup extends Component {
         e.preventDefault();
         if (this.checkNameExists() === false) {
             const group = {
-                groupName: this.state.newGroupName
+                metaData: {
+                    groupName: this.state.newGroupName,
+                    people: 1
+                }
             };
             this.props.submit(group);
         } else {
@@ -54,7 +57,7 @@ export default class NewGroup extends Component {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                    <input name="newGroupName" value={this.state.new} onChange={this.newGroupNameChange} type="text" />
+                    <input name="newGroupName" value={this.state.new} onChange={this.newGroupNameChange} type="text" autoFocus/>
                     {this.state.showMessage ? <p>{this.state.message}</p> : null}
                     <button>Add</button>
                 </form>
@@ -64,7 +67,6 @@ export default class NewGroup extends Component {
     }
 
     componentWillMount() {
-        console.log("mounting");
         this.setState({
             groups: this.props.groups
         });

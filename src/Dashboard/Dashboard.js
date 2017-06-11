@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import firebase from "firebase";
+import firebase, { userRef, groupRef } from "../firebase.js";
 import NewGroup from "../NewGroup/NewGroup.js";
 
 export default class Dashboard extends Component {
@@ -32,8 +32,15 @@ export default class Dashboard extends Component {
             newGroupMenu: false
         });
         const userId = this.state.user.uid;
-        const userRef = firebase.database().ref(`/users/${userId}/groups/`);
-        userRef.push(newGroup);
+        // const userRef = firebase.database().ref(`/users/${userId}/groups/`);
+        const userGroupsRef = userRef.child(userId).child("groups");
+        groupRef.push(newGroup).then((snapshot) => {
+            let newKey = snapshot.key;
+            groupRef.child(newKey).child("metaData").update({
+                id: newKey
+            });
+            userGroupsRef.update({[newKey]: true});
+        });
     }
 
     render() {
@@ -51,23 +58,32 @@ export default class Dashboard extends Component {
         this.setState({
             user: this.props.currentUser
         });
+
+        const userId = this.props.currentUser.uid;
+        // const userRef = firebase.database().ref(`/users/${userId}/groups/`);
+        const userGroupsRef = userRef.child(userId).child("groups");
+        userGroupsRef.on("value", (snapshot) => {
+            let newGroups = [];
+            let that = this;
+            const userGroups = snapshot.val();
+            if (userGroups) {
+                Promise.all(
+                    Object.keys(userGroups).map((groupId) => {
+                        return firebase.database().ref(`groups/${groupId}/metaData`).once("value");
+                    })
+                ).then(function (res) {
+                    res.forEach((snapshot) => {
+                        newGroups.push(snapshot.val());
+                    });
+                    that.setState({
+                        groups: newGroups
+                    });
+                });
+            }
+        });
     }
 
     componentDidMount() {
-        const userId = this.state.user.uid;
-        const userRef = firebase.database().ref(`/users/${userId}/groups/`);
-        userRef.on("value", (snapshot) => {
-            const dbGroups = snapshot.val();
-            const newGroups = [];
-            for (let key in dbGroups) {
-                newGroups.push({
-                    key: key,
-                    name: dbGroups[key].groupName
-                });
-            }
-            this.setState({
-                groups: newGroups
-            });
-        });
+
     }
 }
