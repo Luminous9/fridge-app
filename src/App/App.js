@@ -6,7 +6,7 @@ import {
     Redirect,
     Switch
 } from "react-router-dom";
-import firebase, { auth, database, dbRef } from "../firebase.js";
+import { auth } from "../firebase.js";
 import "./App.css";
 import Dashboard from "../Dashboard/Dashboard.js";
 import LoginPage from "../LoginPage/LoginPage.js";
@@ -30,6 +30,11 @@ class App extends Component {
             this.setState({
                 user: user
             });
+        }).catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log("Error: " + errorCode);
+            console.log("Error Message: " + errorMessage);
         });
     }
 
