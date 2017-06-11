@@ -6,49 +6,12 @@ import {
     Redirect,
     Switch
 } from "react-router-dom";
-import firebase, { auth, database, dbRef } from "./firebase.js";
+import firebase, { auth, database, dbRef } from "../firebase.js";
 import "./App.css";
+import Dashboard from "../Dashboard/Dashboard.js";
+import LoginPage from "../LoginPage/LoginPage.js";
+import Loading from "../Loading/Loading.js";
 
-// Auth Providers
-const googleProvider = new firebase.auth.GoogleAuthProvider();
-
-// Components
-class Dashboard extends Component {
-    render() {
-        return (
-            <h2>Fridge App</h2>
-        );
-    }
-
-    componentWillMount() {
-        console.log("Boom shackalaka");
-    }
-    componentDidMount() {
-        console.log("the end");
-    }
-}
-
-class LoginPage extends Component {
-    render() {
-        return (
-            <div>
-                <h1>Fridge App</h1>
-                <p>Welcome. To get started, go here to learn more about what Fridge App is.</p>
-                <div>
-                    <button onClick={() => this.props.login(googleProvider)}>Login With Google</button>
-                </div>
-            </div>
-        );
-    }
-}
-
-class NotFound extends Component {
-    render() {
-        return (
-            <h2>We could not find the page you are looking for.</h2>
-        );
-    }
-}
 
 class App extends Component {
     constructor() {
@@ -58,6 +21,7 @@ class App extends Component {
             loading: true
         };
         this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
     }
 
     login(provider) {
@@ -71,6 +35,7 @@ class App extends Component {
 
     logout() {
         auth.signOut().then(() => {
+            
             this.setState({
                 user: null
             });
@@ -78,16 +43,23 @@ class App extends Component {
     }
 
     render() {
+        const loadPage = () => {
+            if (this.state.user) {
+                return <Dashboard logout={this.logout} />;
+            } else {
+                return <LoginPage login={this.login} />;
+            }
+        };
         return (
             <Router>
                 <main className="App">
                     <Switch>
                         <Route exact path="/" render={() => (
-                            this.state.user ?
+                            this.state.loading ?
                                 (
-                                    <Dashboard />
+                                    <Loading />
                                 ) : (
-                                    <LoginPage login={this.login} />
+                                    loadPage()
                                 )
                         )} />
                         <Route render={() => <Redirect to="/" />} />
