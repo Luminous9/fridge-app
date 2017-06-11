@@ -50,7 +50,7 @@ class App extends Component {
     render() {
         const loadPage = () => {
             if (this.state.user) {
-                return <Dashboard logout={this.logout} />;
+                return <Dashboard logout={this.logout} currentUser={this.state.user}/>;
             } else {
                 return <LoginPage login={this.login} />;
             }
