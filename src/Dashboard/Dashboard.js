@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import firebase, { userRef, groupRef } from "../firebase.js";
 import NewGroup from "../NewGroup/NewGroup.js";
+import NavPanel from "../NavPanel/NavPanel.js";
+import GroupView from "../GroupView/GroupView.js";
 
 export default class Dashboard extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             user: null,
             newGroupMenu: false,
@@ -32,14 +34,14 @@ export default class Dashboard extends Component {
             newGroupMenu: false
         });
         const userId = this.state.user.uid;
-        // const userRef = firebase.database().ref(`/users/${userId}/groups/`);
         const userGroupsRef = userRef.child(userId).child("groups");
         groupRef.push(newGroup).then((snapshot) => {
             let newKey = snapshot.key;
             groupRef.child(newKey).child("metaData").update({
                 id: newKey
             });
-            userGroupsRef.update({[newKey]: true});
+            userRef.child(userId).update({ activeGroup: newKey });
+            userGroupsRef.update({ [newKey]: true });
         });
     }
 
@@ -47,20 +49,28 @@ export default class Dashboard extends Component {
         return (
             <div>
                 <h2>Fridge App</h2>
-                <button onClick={() => this.props.logout()}>Logout</button>
-                <button onClick={this.showGroupMenu}>New Group</button>
-                {this.state.newGroupMenu ? <NewGroup submit={this.addNewGroup} groups={this.state.groups} close={this.closeGroupMenu} /> : null}
+                {this.state.newGroupMenu ?
+                    <NewGroup submit={this.addNewGroup} groups={this.state.groups} close={this.closeGroupMenu} /> : null
+                }
+                <NavPanel
+                    username={this.props.currentUser.displayName} groups={this.state.groups}
+                    logout={this.props.logout}
+                    showGroupMenu={this.showGroupMenu}
+                />
+                <GroupView
+                    user={this.props.currentUser}
+                    activeGroup={this.props.activeGroup}
+                />
             </div>
         );
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({
             user: this.props.currentUser
         });
 
         const userId = this.props.currentUser.uid;
-        // const userRef = firebase.database().ref(`/users/${userId}/groups/`);
         const userGroupsRef = userRef.child(userId).child("groups");
         userGroupsRef.on("value", (snapshot) => {
             let newGroups = [];
@@ -81,9 +91,5 @@ export default class Dashboard extends Component {
                 });
             }
         });
-    }
-
-    componentDidMount() {
-
     }
 }

@@ -6,7 +6,7 @@ import {
     Redirect,
     Switch
 } from "react-router-dom";
-import { auth } from "../firebase.js";
+import { auth, userRef } from "../firebase.js";
 import "./App.css";
 import Dashboard from "../Dashboard/Dashboard.js";
 import LoginPage from "../LoginPage/LoginPage.js";
@@ -18,6 +18,7 @@ class App extends Component {
         super();
         this.state = {
             user: null,
+            activeGroup: null,
             loading: true
         };
         this.login = this.login.bind(this);
@@ -28,9 +29,10 @@ class App extends Component {
         auth.signInWithPopup(provider).then((result) => {
             const user = result.user;
             this.setState({
-                user: user
+                user: user,
+                loading: true
             });
-        }).catch(function(error) {
+        }).catch(function (error) {
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log("Error: " + errorCode);
@@ -40,7 +42,7 @@ class App extends Component {
 
     logout() {
         auth.signOut().then(() => {
-            
+
             this.setState({
                 user: null
             });
@@ -50,7 +52,7 @@ class App extends Component {
     render() {
         const loadPage = () => {
             if (this.state.user) {
-                return <Dashboard logout={this.logout} currentUser={this.state.user}/>;
+                return <Dashboard logout={this.logout} currentUser={this.state.user} activeGroup={this.state.activeGroup} />;
             } else {
                 return <LoginPage login={this.login} />;
             }
@@ -77,10 +79,24 @@ class App extends Component {
     componentDidMount() {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                this.setState({
-                    user: user,
-                    loading: false
+                userRef.child(user.uid).once("value", (snapshot) => {
+                    if (!snapshot.val()) {
+                        userRef.child(user.uid).set(
+                            {
+                                name: user.displayName,
+                                activeGroup: false
+                            }
+                        );
+                    }
+                    userRef.child(user.uid).child("activeGroup").on("value", (snapshot) => {
+                        this.setState({
+                            user: user,
+                            loading: false,
+                            activeGroup: snapshot.val()
+                        });
+                    });
                 });
+
             } else {
                 this.setState({
                     user: null,
