@@ -19,6 +19,7 @@ class App extends Component {
         this.state = {
             user: null,
             activeGroup: null,
+            groups: [],
             loading: true,
             storages: []
         };
@@ -58,6 +59,7 @@ class App extends Component {
                         logout={this.logout}
                         currentUser={this.state.user}
                         activeGroup={this.state.activeGroup}
+                        groups={this.state.groups}
                         storages={this.state.storages}
                     />
                 );
@@ -119,10 +121,36 @@ class App extends Component {
                         }
 
                         this.setState({
-                            user: user,
-                            loading: false,
                             activeGroup: newActiveGroup
                         });
+                    });
+
+                    const userGroupsRef = userRef.child(user.uid).child("groups");
+                    userGroupsRef.on("value", (snapshot) => {
+                        let newGroups = [];
+                        let that = this;
+                        const userGroups = snapshot.val();
+                        if (userGroups) {
+                            Promise.all(
+                                Object.keys(userGroups).map((groupId) => {
+                                    return groupRef.child(groupId).child("metaData").once("value");
+                                })
+                            ).then((res) => {
+                                res.forEach((snapshot) => {
+                                    newGroups.push(snapshot.val());
+                                });
+                                that.setState({
+                                    user: user,
+                                    loading: false,
+                                    groups: newGroups
+                                });
+                            });
+                        } else {
+                            this.setState({
+                                user: user,
+                                loading: false
+                            });
+                        }
                     });
 
                 });

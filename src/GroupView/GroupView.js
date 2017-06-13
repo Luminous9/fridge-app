@@ -1,14 +1,23 @@
 import React, { Component } from "react";
 import { groupRef } from "../firebase.js";
+import Storage from "../Storage/Storage.js";
 
 export default class GroupView extends Component {
     render() {
-        console.log(this.props.storages);
         const getStorages = () => {
-            if (this.props.storages.length > 0) {
-                return <p>{this.props.storages[0].storageName}</p>;
+            const storages = this.props.storages;
+            if (storages.length > 0) {
+                return (storages.map((storage) => {
+                    return (
+                        <Storage
+                            key={storage.id}
+                            user={this.props.user}
+                            storage={storage}
+                        />
+                    );
+                }));
             } else {
-                return <p>LOADING</p>;
+                return <p>No storages to display</p>;
             }
         };
         return (

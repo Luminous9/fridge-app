@@ -57,7 +57,7 @@ export default class NewGroup extends Component {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                    <input name="newGroupName" value={this.state.new} onChange={this.newGroupNameChange} type="text" autoFocus/>
+                    <input name="newGroupName" value={this.state.newGroupName} onChange={this.newGroupNameChange} type="text" autoFocus/>
                     {this.state.showMessage ? <p>{this.state.message}</p> : null}
                     <button>Add</button>
                 </form>

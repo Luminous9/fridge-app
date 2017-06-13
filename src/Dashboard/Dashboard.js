@@ -36,21 +36,25 @@ export default class Dashboard extends Component {
         const userId = this.state.user.uid;
         const userGroupsRef = userRef.child(userId).child("groups");
         groupRef.push(newGroup).then((snapshot) => {
-            let newKey = snapshot.key;
-            groupRef.child(newKey).child("metaData").update({
-                id: newKey
+            let newGroupKey = snapshot.key;
+            groupRef.child(newGroupKey).child("metaData").update({
+                id: newGroupKey
             });
-            userRef.child(userId).update({ activeGroup: newKey });
-            userGroupsRef.update({ [newKey]: true });
+            userRef.child(userId).update({ activeGroup: newGroupKey });
+            userGroupsRef.update({ [newGroupKey]: true });
 
-            groupRef.child(newKey).child("storages").push({
-                storageName: "Main Fridge"
+            groupRef.child(newGroupKey).child("storages").push({
+                storageName: "Main Fridge",
+                items: false
+            }).then((snapshot) => {
+                groupRef.child(newGroupKey).child("storages").child(snapshot.key).update({
+                    id: snapshot.key
+                });
             });
         });
     }
 
     render() {
-        console.log("dashboard render: " + this.props.storages);
         return (
             <div>
                 <h2>Fridge App</h2>
@@ -58,7 +62,8 @@ export default class Dashboard extends Component {
                     <NewGroup submit={this.addNewGroup} groups={this.state.groups} close={this.closeGroupMenu} /> : null
                 }
                 <NavPanel
-                    username={this.props.currentUser.displayName} groups={this.state.groups}
+                    username={this.props.currentUser.displayName}
+                    groups={this.props.groups}
                     logout={this.props.logout}
                     showGroupMenu={this.showGroupMenu}
                 />
@@ -74,28 +79,6 @@ export default class Dashboard extends Component {
     componentDidMount() {
         this.setState({
             user: this.props.currentUser
-        });
-
-        const userId = this.props.currentUser.uid;
-        const userGroupsRef = userRef.child(userId).child("groups");
-        userGroupsRef.on("value", (snapshot) => {
-            let newGroups = [];
-            let that = this;
-            const userGroups = snapshot.val();
-            if (userGroups) {
-                Promise.all(
-                    Object.keys(userGroups).map((groupId) => {
-                        return firebase.database().ref(`groups/${groupId}/metaData`).once("value");
-                    })
-                ).then(function (res) {
-                    res.forEach((snapshot) => {
-                        newGroups.push(snapshot.val());
-                    });
-                    that.setState({
-                        groups: newGroups
-                    });
-                });
-            }
         });
     }
 }
