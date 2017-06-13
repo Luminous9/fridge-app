@@ -6,7 +6,7 @@ import {
     Redirect,
     Switch
 } from "react-router-dom";
-import { auth, userRef } from "../firebase.js";
+import { auth, userRef, groupRef } from "../firebase.js";
 import "./App.css";
 import Dashboard from "../Dashboard/Dashboard.js";
 import LoginPage from "../LoginPage/LoginPage.js";
@@ -19,7 +19,8 @@ class App extends Component {
         this.state = {
             user: null,
             activeGroup: null,
-            loading: true
+            loading: true,
+            storages: []
         };
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
@@ -52,7 +53,14 @@ class App extends Component {
     render() {
         const loadPage = () => {
             if (this.state.user) {
-                return <Dashboard logout={this.logout} currentUser={this.state.user} activeGroup={this.state.activeGroup} />;
+                return (
+                    <Dashboard
+                        logout={this.logout}
+                        currentUser={this.state.user}
+                        activeGroup={this.state.activeGroup}
+                        storages={this.state.storages}
+                    />
+                );
             } else {
                 return <LoginPage login={this.login} />;
             }
@@ -88,13 +96,35 @@ class App extends Component {
                             }
                         );
                     }
-                    userRef.child(user.uid).child("activeGroup").on("value", (snapshot) => {
+                    userRef.child(user.uid).child("activeGroup").on("value", (activeGroupSnap) => {
+                        const oldActiveGroup = this.state.activeGroup;
+                        const newActiveGroup = activeGroupSnap.val();
+
+                        if (oldActiveGroup) {
+                            groupRef.child(oldActiveGroup).child("storages").off();
+                        }
+                        if (newActiveGroup) {
+                            groupRef.child(newActiveGroup).child("storages").on("value", (snapshot) => {
+                                const dbStorages = snapshot.val();
+                                if (dbStorages) {
+                                    let newStorages = [];
+                                    for (var storage in dbStorages) {
+                                        newStorages.push(dbStorages[storage]);
+                                    }
+                                    this.setState({
+                                        storages: newStorages
+                                    });
+                                }
+                            });
+                        }
+
                         this.setState({
                             user: user,
                             loading: false,
-                            activeGroup: snapshot.val()
+                            activeGroup: newActiveGroup
                         });
                     });
+
                 });
 
             } else {

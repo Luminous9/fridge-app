@@ -42,10 +42,15 @@ export default class Dashboard extends Component {
             });
             userRef.child(userId).update({ activeGroup: newKey });
             userGroupsRef.update({ [newKey]: true });
+
+            groupRef.child(newKey).child("storages").push({
+                storageName: "Main Fridge"
+            });
         });
     }
 
     render() {
+        console.log("dashboard render: " + this.props.storages);
         return (
             <div>
                 <h2>Fridge App</h2>
@@ -60,6 +65,7 @@ export default class Dashboard extends Component {
                 <GroupView
                     user={this.props.currentUser}
                     activeGroup={this.props.activeGroup}
+                    storages={this.props.storages}
                 />
             </div>
         );

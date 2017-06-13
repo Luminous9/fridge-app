@@ -1,21 +1,23 @@
 import React, { Component } from "react";
+import { groupRef } from "../firebase.js";
 
 export default class GroupView extends Component {
     render() {
-        const showGroup = () => {
-            if (this.props.activeGroup === false) {
-                return <p>You don't have any groups yet.</p>;
+        console.log(this.props.storages);
+        const getStorages = () => {
+            if (this.props.storages.length > 0) {
+                return <p>{this.props.storages[0].storageName}</p>;
             } else {
-                return <p>a group</p>;
+                return <p>LOADING</p>;
             }
         };
         return (
             <div>
                 {
-                    (this.props.activeGroup === null) ?
-                        <p>Loading...</p>
+                    this.props.activeGroup === false ?
+                        <p>You don't have any groups yet.</p>
                         :
-                        showGroup()
+                        getStorages()
                 }
             </div>
         );
