@@ -10,6 +10,7 @@ export default class Storage extends Component {
         };
         this.showAddItem = this.showAddItem.bind(this);
         this.closeAddItem = this.closeAddItem.bind(this);
+        this.addNewItem = this.addNewItem.bind(this);
     }
 
     showAddItem() {
@@ -25,7 +26,13 @@ export default class Storage extends Component {
     }
 
     addNewItem(item) {
-
+        this.closeAddItem();
+        const itemsRef = groupRef.child(this.props.group).child("storages").child(this.props.storage.id).child("items");
+        itemsRef.push(item).then((snapshot) => {
+            itemsRef.child(snapshot.key).update({
+                id: snapshot.key
+            });
+        });
     }
 
     render() {
@@ -38,13 +45,20 @@ export default class Storage extends Component {
             }
         };
         const showItems = (items) => {
+            const itemsArray = [];
             for (var item in items) {
+                itemsArray.push({
+                    name: items[item].name,
+                    id: items[item].id
+                });
+            }
+            return (itemsArray.map((item) => {
                 return (
-                    <div>
+                    <div key={item.id}>
                         <p>{item.name}</p>
                     </div>
                 );
-            }
+            }));
         };
         return (
             <div>
@@ -52,7 +66,7 @@ export default class Storage extends Component {
                 <button onClick={this.showAddItem}>Add Item</button>
                 {
                     this.state.addItemMenu ?
-                        <NewItem close={this.closeAddItem} />
+                        <NewItem close={this.closeAddItem} add={this.addNewItem} />
                         :
                         null
                 }

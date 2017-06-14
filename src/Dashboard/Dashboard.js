@@ -62,7 +62,7 @@ export default class Dashboard extends Component {
                     <NewGroup submit={this.addNewGroup} groups={this.state.groups} close={this.closeGroupMenu} /> : null
                 }
                 <NavPanel
-                    username={this.props.currentUser.displayName}
+                    user={this.props.currentUser}
                     groups={this.props.groups}
                     logout={this.props.logout}
                     showGroupMenu={this.showGroupMenu}

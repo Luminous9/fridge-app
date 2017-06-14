@@ -13,6 +13,7 @@ export default class GroupView extends Component {
                             key={storage.id}
                             user={this.props.user}
                             storage={storage}
+                            group={this.props.activeGroup}
                         />
                     );
                 }));
