@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: center;
     background-color: #26c6da;
+    min-height: 100vh;
 }
 
 .subHeading {
