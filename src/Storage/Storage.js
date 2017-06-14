@@ -54,9 +54,9 @@ export default class Storage extends Component {
             }
             return (itemsArray.map((item) => {
                 return (
-                    <div key={item.id}>
+                    <button key={item.id}>
                         <p>{item.name}</p>
-                    </div>
+                    </button>
                 );
             }));
         };
