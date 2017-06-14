@@ -1,3 +1,17 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
+
+.App, .LoginPage, .Dashboard {
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6, p, .sub-heading {
+    margin-top: 0;
+}
+
+/*
+primary blue: #26c6da
+light blue: #6ff9ff
+dark blue: #0095a8
+*/

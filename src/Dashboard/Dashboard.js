@@ -56,7 +56,7 @@ export default class Dashboard extends Component {
 
     render() {
         return (
-            <div>
+            <div className="Dashboard">
                 <h2>Fridge App</h2>
                 {this.state.newGroupMenu ?
                     <NewGroup submit={this.addNewGroup} groups={this.state.groups} close={this.closeGroupMenu} /> : null
