@@ -1,0 +1,20 @@
+.NewItem {
+    position: absolute;
+    width: 80vw;
+    max-width: 500px;
+    min-height: 30vh;
+    max-height: 90vh;
+    background: #068abd;
+    color: white;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: auto;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

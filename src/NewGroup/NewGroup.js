@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import styles from "./NewGroup.css";
 
 export default class NewGroup extends Component {
     constructor() {
@@ -6,8 +7,7 @@ export default class NewGroup extends Component {
         this.state = {
             newGroupName: "",
             message: "",
-            showMessage: false,
-            groups: []
+            showMessage: false
         };
         this.newGroupNameChange = this.newGroupNameChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,7 +25,7 @@ export default class NewGroup extends Component {
         if (this.checkNameExists() === false) {
             const group = {
                 metaData: {
-                    groupName: this.state.newGroupName,
+                    groupName: this.state.newGroupName.toUpperCase(),
                     people: 1
                 }
             };
@@ -41,8 +41,8 @@ export default class NewGroup extends Component {
     checkNameExists() {
         const newName = this.state.newGroupName;
         let nameExists = false;
-        this.state.groups.forEach((group) => {
-            if (group.name === newName) {
+        this.props.groups.forEach((group) => {
+            if (group.groupName === newName) {
                 nameExists = true;
             }
         });
@@ -55,11 +55,13 @@ export default class NewGroup extends Component {
 
     render() {
         return (
-            <div>
+            <div className={styles.NewGroup}>
                 <form onSubmit={this.handleSubmit}>
-                    <input name="newGroupName" value={this.state.newGroupName} onChange={this.newGroupNameChange} type="text" autoFocus/>
-                    {this.state.showMessage ? <p>{this.state.message}</p> : null}
+                    <label htmlFor="newGroupName">Group Name:</label>
+                    <input name="newGroupName" value={this.state.newGroupName} onChange={this.newGroupNameChange} type="text" placeholder="Home/Office/etc." autoFocus/>
                     <button>Add</button>
+                    {this.state.showMessage ? <p>{this.state.message}</p> : null}
+                    <p className={styles.tempMessage}>Joining other users' groups coming soon.</p>
                 </form>
                 <button onClick={this.closeMenu}>Close</button>
             </div>

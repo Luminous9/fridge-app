@@ -1,10 +1,10 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "My Fridge",
+  "name": "What's In My Fridge",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "192x192",
+      "src": "fridge.png",
+      "sizes": "200x200",
       "type": "image/png"
     }
   ],

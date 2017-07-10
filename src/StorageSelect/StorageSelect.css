@@ -1,0 +1,26 @@
+.StorageSelect {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    background: transparent;
+    padding-top: 20px;
+    color: #EEE;
+}
+
+.StorageSelect button {
+    background: transparent;
+    color: #EEE;
+    margin: 10px 0;
+}
+
+.addRemove {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.addRemove button {
+    background: #EEE;
+    color: #034F6C;
+}

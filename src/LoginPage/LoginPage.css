@@ -1,13 +1,55 @@
 .LoginPage {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    background-color: #26c6da;
+    background-color: #068abd;
     min-height: 100vh;
 }
 
-.subHeading {
-    font-size: 1.5rem;
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 85vh;
+    width: 70%;
+    max-width: 650px;
+    padding: 10px;
+    border: 3px solid #EEE;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
 }
 
+.placeholder {
+    height: 25vh;
+    width: 100%;
+    margin-top: 5vh;
+    border-top: 3px solid #EEE;
+}
+
+.knob {
+    width: 20px;
+    height: 10vh;
+    border-radius: 15px;
+    background: #EEE;
+    margin: 30px 0 0 30px;
+}
+
+.button {
+    display: block;
+    padding: 10px;
+    background-color: #EEE;
+    font-weight: bold;
+    color: #0095a8;
+}
+
+.heading {
+    font-size: 2.5rem;
+    color: #EEE;
+}
+
+.subHeading {
+    font-size: 1.25rem;
+    margin-bottom: 40px;
+    color: #EEE;
+}

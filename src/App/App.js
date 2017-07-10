@@ -25,6 +25,7 @@ class App extends Component {
         };
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
+        this.loadingTimeout = this.loadingTimeout.bind(this);
     }
 
     login(provider) {
@@ -44,11 +45,22 @@ class App extends Component {
 
     logout() {
         auth.signOut().then(() => {
-
             this.setState({
                 user: null
             });
         });
+    }
+
+    loadingTimeout() {
+        const that = this;
+        setTimeout(function () {
+            if (that.state.loading === true) {
+                that.setState({
+                    loading: false
+                })
+                alert("Connection Failed");
+            }
+        }, 10000);
     }
 
     render() {
@@ -89,6 +101,8 @@ class App extends Component {
     componentDidMount() {
         auth.onAuthStateChanged((user) => {
             if (user) {
+                this.loadingTimeout();
+
                 userRef.child(user.uid).once("value", (snapshot) => {
                     if (!snapshot.val()) {
                         userRef.child(user.uid).set(

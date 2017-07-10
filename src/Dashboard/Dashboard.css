@@ -1,0 +1,12 @@
+.Dashboard {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.heading {
+    margin: 0;
+    background: #0095a8;
+    color: #EEE;
+    padding: 1vh 0;
+}

@@ -1,0 +1,26 @@
+.ItemDetails {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    padding-top: 20px;
+    background: transparent;
+    color: #EEE;
+}
+
+.itemInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.itemInfo p {
+    margin-bottom: 10px;
+}
+
+.itemInfo button {
+    margin-top: 30px;
+    background: #EEE;
+    color: #034F6C;
+    font-size: 16px;
+}

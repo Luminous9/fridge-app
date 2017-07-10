@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { groupRef } from "../firebase.js";
+import styles from "./NewStorage.css";
 
 export default class StorageSelect extends Component {
     constructor() {
@@ -28,9 +29,9 @@ export default class StorageSelect extends Component {
 
     render() {
         return (
-            <div>
+            <div className={styles.NewStorage}>
                 <form onSubmit={this.handleSubmit}>
-                    <input name="storageName" value={this.state.storageName} onChange={this.handleChange} type="text" autoFocus required />
+                    <input name="storageName" value={this.state.storageName} onChange={this.handleChange} type="text" placeholder="Fridge/Freezer/etc." autoFocus required />
                     <button>Add</button>
                 </form>
                 <button onClick={this.props.close}>Cancel</button>

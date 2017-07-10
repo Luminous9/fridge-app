@@ -1,0 +1,12 @@
+.Loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #068abd;
+    height: 100vh;
+}
+
+.Loading h2 {
+    color: #EEE;
+    margin: 0;
+}

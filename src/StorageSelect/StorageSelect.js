@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { groupRef } from "../firebase.js";
 import NewStorage from "../NewStorage/NewStorage.js";
+import styles from "./StorageSelect.css";
 
 export default class StorageSelect extends Component {
     constructor() {
@@ -14,9 +15,13 @@ export default class StorageSelect extends Component {
     }
 
     showStorageMenu() {
-        this.setState({
-            addStorageMenu: true
-        });
+        if (this.props.storages.length < 5) {
+            this.setState({
+                addStorageMenu: true
+            });
+        } else {
+            alert("You can only have up to 4 storages per group.");
+        }
     }
 
     closeStorageMenu() {
@@ -36,15 +41,24 @@ export default class StorageSelect extends Component {
 
     render() {
         return (
-            <div>
+            <div className={styles.StorageSelect}>
+                <h3>Storages</h3>
                 {
                     this.props.storages.map((storage) => {
                         return (
-                            <button key={storage.id} onClick={() => {this.props.setActiveStorage(storage.id);}}>{storage.storageName}</button>
+                            <button key={storage.id} onClick={() => { this.props.setActiveStorage(storage.id); }}>{storage.storageName}</button>
                         );
                     })
                 }
-                <button onClick={this.showStorageMenu}>Add Storage</button>
+                {
+                    this.props.group ?
+                        <div className={styles.addRemove}>
+                            <button onClick={this.showStorageMenu}>Add Storage</button>
+                            {/*<button>Remove Storage</button>*/}
+                        </div>
+                        :
+                        null
+                }
                 {
                     this.state.addStorageMenu ?
                         <NewStorage close={this.closeStorageMenu} add={this.addNewStorage} />

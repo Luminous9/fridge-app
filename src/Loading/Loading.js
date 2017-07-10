@@ -1,8 +1,11 @@
 import React from "react";
+import styles from "./Loading.css"
 
 const Loading = () => {
     return (
-        <p>Loading...</p>
+        <div className={styles.Loading}>
+            <h2>Loading...</h2>
+        </div>
     );
 };
 

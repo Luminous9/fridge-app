@@ -1,0 +1,70 @@
+.Storage {
+    display: flex;
+    width: 60%;
+    flex-direction: column;
+    padding-top: 20px;
+    border-radius: 11px;
+    background: white;
+    margin: 14px;
+    box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+.Storage p {
+    margin: 0;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    color: #034F6C;
+}
+
+.header button {
+    background: transparent;
+    font-size: 1.75rem;
+    color: #034F6C;
+    padding: 6px 10px;
+    margin: 0 10px;
+}
+
+.items {
+    display: flex;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+.items p {
+    width: 100%;
+}
+
+.item {
+    background: #068abd;
+    padding: 5px;
+    color: #EEE;
+    width: 22%;
+    margin: 1.5%;
+}
+
+:global .meat {
+    background: #bf2f2f;
+}
+
+:global .fruits\/veggies {
+    background: #33bf2f;
+}
+
+:global .grain {
+    background: #dbb90f;
+}
+
+:global .other {
+    background: #6d8587;
+}

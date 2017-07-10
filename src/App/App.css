@@ -7,8 +7,24 @@ h1, h2, h3, h4, h5, h6, p, .subHeading {
     margin-top: 0;
 }
 
+button {
+    border: none;
+    border-radius: 2px;
+    /*background: transparent;*/
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+input {
+    max-width: 100%;
+}
+
 /*
 primary blue: #26c6da
 light blue: #6ff9ff
-dark blue: #0095a8
+dark blue: #068abd
 */

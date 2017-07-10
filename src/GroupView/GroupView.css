@@ -1,0 +1,13 @@
+.GroupView {
+    display: flex;
+    flex-grow: 1;
+    background: #034F6C;
+    box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.message {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    margin-top: 20px;
+}

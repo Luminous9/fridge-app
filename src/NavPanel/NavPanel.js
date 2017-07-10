@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { userRef } from "../firebase.js";
+import styles from "./NavPanel.css";
 
 export default class NavPanel extends Component {
     constructor() {
@@ -15,16 +16,18 @@ export default class NavPanel extends Component {
 
     render() {
         return (
-            <div>
-                <p>Signed in as: {this.props.user.displayName}</p>
-                <button onClick={() => this.props.logout()}>Logout</button>
-                <div className="groups">
+            <div className={styles.NavPanel}>
+                <div className={styles.user}>
+                    <p className={styles.name}>{this.props.user.displayName}</p>
+                    <button onClick={() => this.props.logout()}>Logout</button>
+                </div>
+                <h1 className={styles.heading}>What's In My Fridge?</h1>
+                <div className={styles.groups}>
                     {
                         this.props.groups.map((group) => {
                             return (
                                 <button key={group.id} onClick={() => {this.changeGroup(group.id);}}>
-                                    <p>{group.groupName}</p>
-                                    <p>{group.people}</p>
+                                    {group.groupName}
                                 </button>
                             );
                         })

@@ -1,0 +1,45 @@
+.NavPanel {
+    display: flex;
+    justify-content: center;
+    padding: 2px;
+    background: #068abd;
+    color: #FFF;
+}
+
+.NavPanel > div {
+    flex-grow: 1;
+}
+
+.NavPanel div, .NavPanel button {
+    display: flex;
+    flex-direction: row;
+}
+
+.NavPanel button {
+    background: transparent;
+    color: #FFF;
+}
+
+.NavPanel p, .NavPanel h1 {
+    margin: 0;
+}
+
+.NavPanel .name {
+    font-style: italic;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.user {
+    padding-left: 8px;
+}
+
+.groups {
+    justify-content: flex-end;
+}
+
+.groups button {
+    padding: 8px;
+    margin-right: 5px;
+}
